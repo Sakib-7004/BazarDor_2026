@@ -6,6 +6,10 @@ export type Product = {
   category: string;
   categoryName: string;
   unit: string;
+  /** Display weight or package size, e.g. 1 kg or 500 g. */
+  weight?: string;
+  /** Illustrative discount percentage for demo products or API-provided promotions. */
+  discountPercent?: number;
   price: number;
   previousPrice: number;
   changePercent: number;
