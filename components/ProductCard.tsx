@@ -13,6 +13,9 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       <div className="product-top">
         <div className="product-emoji">{product.emoji}</div>
+        {product.discountPercent !== undefined && (
+          <span className="tag" title="ডেমো ছাড়; বাস্তব দোকানের অফার নয়">-{product.discountPercent}%</span>
+        )}
         <span
           className={`change-badge ${
             !changeAvailable || change === 0
@@ -33,7 +36,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </span>
       </div>
       <h3>{product.name}</h3>
-      <div className="product-unit">{product.unit}</div>
+      <div className="product-unit">{product.weight || product.unit}</div>
       <div className="price-row">
         <div>
           <span className="price-label">আজকের দাম</span>
