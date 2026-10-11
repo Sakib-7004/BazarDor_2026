@@ -45,9 +45,18 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
+BETTER_AUTH_TRUSTED_ORIGINS=http://localhost:3000
 ```
 
-For Google and GitHub login, create OAuth apps in the respective developer consoles and add their credentials. Set the callback URL to `http://localhost:3000/api/auth/callback/google` or `http://localhost:3000/api/auth/callback/github` as applicable. For production, set the production domain and callback URLs too. Never commit credentials.
+For Google and GitHub login, create OAuth apps in the respective developer consoles and add the credentials to your local `.env.local` or hosting provider's environment settings. OAuth cannot be completed without real provider credentials.
+
+**Callback URLs (must match exactly):**
+- Google authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+- GitHub Authorization callback URL: `http://localhost:3000/api/auth/callback/github`
+
+For production, replace `http://localhost:3000` with your deployed HTTPS domain in `BETTER_AUTH_URL`, add that domain to `BETTER_AUTH_TRUSTED_ORIGINS`, and register the matching production callback URLs in both provider consoles. Restart/redeploy after changing environment variables. Never commit credentials or expose client secrets in `NEXT_PUBLIC_*` variables.
+
+The sign-in page checks whether each provider is configured and shows a clear message if its client ID or secret is missing. New Google/GitHub users are created through the same OAuth flow; returning users can sign in through it.
 
 ### 4. Start the website
 
@@ -67,6 +76,10 @@ npm start
 ```
 
 These commands should be run locally after pulling the latest changes. A successful GitHub file update is not proof that the app builds or that authentication works end to end.
+
+## Demo products and price analytics
+
+The home page includes a separate demo section with 12 illustrative grocery products, package weights, discount percentages, and example prices. The displayed minimum, maximum, and average demo prices are calculated from that sample dataset. Product detail pages calculate the market minimum from market `minPrice` values, the maximum from `maxPrice` values, and the average from the available market `price` values. These sample prices and discounts are for UI/testing only; they are not live market quotes or real store promotions.
 
 ## API endpoints
 The app tries these base URLs in order:
