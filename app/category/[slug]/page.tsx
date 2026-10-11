@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { getCategories, getCategoryProducts, slugify } from "@/lib/api";
 import CategoryBrowser from "@/components/CategoryBrowser";
 export const revalidate=300;
