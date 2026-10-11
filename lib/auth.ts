@@ -19,6 +19,7 @@ const database = new Database(process.env.DATABASE_URL || "./bazardor.db");
 
 export const auth = betterAuth({
   database,
+  trustedOrigins: [...new Set([authUrl, ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS || "").split(",")].filter((origin): origin is string => Boolean(origin?.trim())).map((origin) => origin.trim()))],
   baseURL: authUrl || "http://localhost:3000",
   secret: authSecret || "local-development-secret-change-this-123456789",
   emailAndPassword: { enabled: true, minPasswordLength: 8 },
