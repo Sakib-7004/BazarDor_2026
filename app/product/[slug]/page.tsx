@@ -21,8 +21,8 @@ export default async function ProductDetailPage({
   if (!product) notFound();
 
   const prices = product.markets.map((market) => market.price);
-  const min = prices.length ? Math.min(...prices) : product.price;
-  const max = prices.length ? Math.max(...prices) : product.price;
+  const min = product.markets.length ? Math.min(...product.markets.map((market) => market.minPrice)) : product.price;
+  const max = product.markets.length ? Math.max(...product.markets.map((market) => market.maxPrice)) : product.price;
   const average = prices.length
     ? prices.reduce((sum, price) => sum + price, 0) / prices.length
     : product.price;
@@ -47,7 +47,8 @@ export default async function ProductDetailPage({
           <p>{product.description}</p>
           <div className="tag-row">
             <span className="tag">{product.categoryName}</span>
-            <span className="tag">{product.unit}</span>
+            <span className="tag">{product.weight || product.unit}</span>
+            {product.discountPercent !== undefined && <span className="tag">-{product.discountPercent}% ডেমো ছাড়</span>}
           </div>
           <div className="price-row">
             <div>
@@ -86,7 +87,7 @@ export default async function ProductDetailPage({
         <section className="detail-summary">
           <h2 style={{ marginTop: 0 }}>দামের সারাংশ</h2>
           <p style={{ color: "#68756c", lineHeight: 1.7 }}>
-            বিভিন্ন বাজারে পাওয়া দামের সংক্ষিপ্ত তুলনা।
+            বিভিন্ন বাজারের দাম থেকে সর্বনিম্ন, সর্বোচ্চ ও গড় হিসাব করা হয়েছে।
           </p>
           <div className="summary-grid">
             <div className="summary-stat">
@@ -105,7 +106,7 @@ export default async function ProductDetailPage({
           <div className="notice">
             {fallbackMarket
               ? "API-তে বাজারভিত্তিক দাম পাওয়া যায়নি। এখানে দেখানো স্থানীয় বাজারের সারিটি পণ্যের সাধারণ দামের fallback, যাচাই করা বাজারভিত্তিক quotation নয়।"
-              : "এই দামগুলো নির্দেশক। কেনার আগে স্থানীয় বাজারে যাচাই করুন। API-তে বাজারভিত্তিক তথ্য না থাকলে এটি fallback তথ্য হতে পারে।"}
+              : "{product.isSampleData ? "নিচের সব মূল্য শুধুমাত্র উদাহরণ হিসেবে তৈরি করা হয়েছে। এগুলো বাস্তব বাজার থেকে সংগ্রহ করা হয়নি।" : "এই দামগুলো নির্দেশক। কেনার আগে স্থানীয় বাজারে যাচাই করুন। API-তে বাজারভিত্তিক তথ্য না থাকলে এটি fallback তথ্য হতে পারে।"}"}
           </div>
         </section>
 
