@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getCategories, getCategoryProducts, slugify } from "@/lib/api";
+import CategoryBrowser from "@/components/CategoryBrowser";
+export const revalidate=300;
+export default async function CategoryPage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const [categories,products]=await Promise.all([getCategories(),getCategoryProducts(decodeURIComponent(slug))]);const category=categories.find(c=>c.slug===slug||slugify(c.name)===slug||c.id===slug);if(!category||!products.length)return <div className="container page-heading"><div className="error-state"><div className="big-emoji">🧺</div><h1>এই ক্যাটাগরি পাওয়া যায়নি</h1><p>ক্যাটাগরির ঠিকানা ভুল হতে পারে অথবা এখানে এখন কোনো পণ্য নেই।</p><Link className="btn btn-primary" href="/">হোম পেজে ফিরে যান</Link></div></div>;return <div className="container"><section className="page-heading"><div className="breadcrumbs"><Link href="/">হোম</Link> / {category.name}</div><h1>{category.emoji} {category.name}</h1><p>এই ক্যাটাগরির পণ্যের দাম দেখুন এবং কম থেকে বেশি বা বেশি থেকে কম সাজান।</p></section><CategoryBrowser products={products}/></div>}
